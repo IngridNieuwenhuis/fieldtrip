@@ -242,6 +242,13 @@ switch interpolate
       ft_notice('resampling data onto regularly spaced time axis\n');
       tmpcfg = [];
       tmpcfg.time = {begtime:dt:endtime};
+      % making sure original time axis does not have duplicates, ifso fix to prevent error during interpolation
+      while sum(diff(time)==0)>0
+          ind_dup = find(diff(time)==0);
+          ind_dup = ind_dup+1;
+          time(ind_dup) = time(ind_dup)+0.001*dt;
+      end
+      raw.time{1} = time;
       
       if ~isempty(isinteger)
         % interpolating integer channels using nearest
